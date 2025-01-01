@@ -1,0 +1,26 @@
+---
+Description: Create a new EC2
+Resources:
+  CreateEC2:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      ImageId: ami-003f5a76758516d1e
+      SecurityGroups:
+      - !Ref EC2SG
+      UserData:
+        Fn::Base64: >
+          #!/bin/bash  apt update -y  apt install -y apache2  echo "Hello This is the test, coonfigure by MehrdadFahoul!" > /var/www/html/index.html  systemctl start apache2 
+  EC2SG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow SSH port and HTTP
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: 0.0.0.0/0
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
